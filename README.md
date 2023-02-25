@@ -1,8 +1,10 @@
 # bbcSpider
 
-``` 
-cd news	
 ```
+
+cd news 
+```
+
 ```
 scrapy crawl bbc -o informations.csv
 ```
