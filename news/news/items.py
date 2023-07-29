@@ -11,4 +11,3 @@ class NewsItem(scrapy.Item):
     # name = scrapy.Field()
     link = scrapy.Field()
     summaries = scrapy.Field()
-    text = scrapy.Field()
