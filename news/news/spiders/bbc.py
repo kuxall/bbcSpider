@@ -7,23 +7,25 @@ class BbcSpider(scrapy.Spider):
     start_urls = ["http://www.bbc.com/nepali"]
 
     def parse(self, response):
-        for links in response.css('h3.bbc-150hhyj'):
-            link = "https://www.bbc.com" + links.css('a::attr(href)').get()
-            yield scrapy.Request(link, callback=self.parse_details)
+        for URLs in response.css('h3.bbc-150hhyj'):
+            URL = "https://www.bbc.com" + URLs.css('a::attr(href)').get()
+            yield scrapy.Request(URL, callback=self.parse_details)
 
     def parse_details(self, response):
         item = NewsItem()
-        item['link'] = response.url
+        item['URL'] = response.url
 
-        summaries = response.css('b::text').getall()
-        summaries = ' '.join(summaries)  # Join the summaries using a space separator
-        summaries = summaries.replace(',', '')  # Remove commas from the concatenated summaries
+        title = response.css('b::text').getall()
+        title = ' '.join(title)  # Join the title using a space separator
+        title = title.replace(',', '')  # Remove commas from the concatenated title
 
-        text = response.css('p::text').getall()
-        text = ' '.join(text)  # Join the text using a space separator
-        text = text.replace(',', '')  # Remove commas from the concatenated text
+        content = response.css('p::text').getall()
+        content = ' '.join(content)  # Join the content using a space separator
+        item['content'] = content
 
-        # Concatenate summaries and text into a single field called 'summaries'
-        item['summaries'] = summaries + text
+        content = content.replace(',', '')  # Remove commas from the concatenated content
+
+        # Concatenate title and content into a single field called 'title'
+        item['title'] = title + content
 
         yield item
