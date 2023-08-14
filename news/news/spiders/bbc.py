@@ -1,4 +1,5 @@
 import scrapy
+import datetime
 from news.items import NewsItem
 
 class BbcSpider(scrapy.Spider):
@@ -8,12 +9,26 @@ class BbcSpider(scrapy.Spider):
 
     def parse(self, response):
         for URLs in response.css('h3.bbc-150hhyj'):
-            URL = "https://www.bbc.com" + URLs.css('a::attr(href)').get()
-            yield scrapy.Request(URL, callback=self.parse_details)
+            url = "https://www.bbc.com" + URLs.css('a::attr(href)').get()
+            yield scrapy.Request(url, callback=self.parse_details)
 
     def parse_details(self, response):
         item = NewsItem()
-        item['URL'] = response.url
+        item['url'] = response.url
+
+        # Set published_date to the current date
+        item['published_date'] = datetime.datetime.now().strftime("%Y-%m-%d")
+
+        # Extract category from the url
+        
+        item['category'] = "politics"
+
+        item['website_name'] = "BBC"
+
+
+        item['authors'] = 'unknown'
+
+        item['language'] = "nepali"
 
         title = response.css('b::text').getall()
         title = ' '.join(title)  # Join the title using a space separator
