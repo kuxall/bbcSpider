@@ -16,18 +16,15 @@ class BbcSpider(scrapy.Spider):
         item = NewsItem()
         item['url'] = response.url
 
-        # Set published_date to the current date
-        item['published_date'] = datetime.datetime.now().strftime("%Y-%m-%d")
+        # Convert and set published_date to the desired format
+        published_date = datetime.datetime.now().strftime("%d-%m-%Y")
+        item['published_date'] = published_date
 
         # Extract category from the url
-        
         item['category'] = "politics"
 
         item['website_name'] = "BBC"
-
-
         item['authors'] = 'unknown'
-
         item['language'] = "nepali"
 
         title = response.css('b::text').getall()
